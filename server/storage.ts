@@ -1,38 +1,89 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { db } from "./db";
+import {
+  tracks, courses, modules, lessons, enrollments, progress, profiles,
+  type Track, type Course, type Module, type Lesson, type Enrollment, type Progress, type Profile
+} from "@shared/schema";
+import { z } from "zod";
+import { createInsertSchema } from "drizzle-zod";
+import { eq } from "drizzle-orm";
 
-// modify the interface with any CRUD methods
-// you might need
+type InsertTrack = typeof tracks.$inferInsert;
+type InsertCourse = typeof courses.$inferInsert;
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Profiles
+  getProfile(userId: string): Promise<Profile | undefined>;
+  
+  // Tracks
+  getTracks(): Promise<Track[]>;
+  createTrack(track: InsertTrack): Promise<Track>;
+  
+  // Courses
+  getCourses(): Promise<Course[]>;
+  getCourseBySlug(slug: string): Promise<Course | undefined>;
+  createCourse(course: InsertCourse): Promise<Course>;
+  
+  // Enrollments
+  getEnrollments(userId: string): Promise<Enrollment[]>;
+  createEnrollment(userId: string, courseId: number): Promise<Enrollment>;
+  
+  // Progress
+  getProgress(userId: string): Promise<Progress[]>;
+  markLessonComplete(userId: string, lessonId: number): Promise<Progress>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DatabaseStorage implements IStorage {
+  async getProfile(userId: string): Promise<Profile | undefined> {
+    const [profile] = await db.select().from(profiles).where(eq(profiles.userId, userId));
+    return profile;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getTracks(): Promise<Track[]> {
+    return await db.select().from(tracks).orderBy(tracks.order);
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async createTrack(track: InsertTrack): Promise<Track> {
+    const [newTrack] = await db.insert(tracks).values(track).returning();
+    return newTrack;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getCourses(): Promise<Course[]> {
+    return await db.select().from(courses);
+  }
+
+  async getCourseBySlug(slug: string): Promise<Course | undefined> {
+    const [course] = await db.select().from(courses).where(eq(courses.slug, slug));
+    return course;
+  }
+
+  async createCourse(course: InsertCourse): Promise<Course> {
+    const [newCourse] = await db.insert(courses).values(course).returning();
+    return newCourse;
+  }
+
+  async getEnrollments(userId: string): Promise<Enrollment[]> {
+    return await db.select().from(enrollments).where(eq(enrollments.userId, userId));
+  }
+
+  async createEnrollment(userId: string, courseId: number): Promise<Enrollment> {
+    const [enrollment] = await db.insert(enrollments).values({
+      userId,
+      courseId,
+    }).returning();
+    return enrollment;
+  }
+
+  async getProgress(userId: string): Promise<Progress[]> {
+    return await db.select().from(progress).where(eq(progress.userId, userId));
+  }
+
+  async markLessonComplete(userId: string, lessonId: number): Promise<Progress> {
+    const [newProgress] = await db.insert(progress).values({
+      userId,
+      lessonId,
+    }).returning();
+    return newProgress;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
