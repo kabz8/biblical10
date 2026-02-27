@@ -1,0 +1,278 @@
+Paste this as-is into Replit AI (text only). It tells Replit to crawl the current site content, then rebuild everything with the Miss Excel–style course page scroll template, plus heavy dashboards, dark mode, language switcher, Urbanist font, and logo-based colors.
+
+
+---
+
+REPLIT PROMPT (TEXT ONLY):
+
+You are a senior full-stack engineer + product designer. I need a complete revamp of this site: https://www.biblicalfinancialcourses.com/
+
+Goal: rebuild it as a modern course platform with a “Miss Excel” style marketing + course page experience (high conversion, strong scroll rhythm), AND a robust admin + user dashboard (LMS + analytics + content management). Use Urbanist font everywhere, include a dark mode switcher, and a language switcher with English (EN), Swahili (SWA), plus 3 more languages (French FR, Arabic AR (RTL), Portuguese PT). Use the primary and secondary colors from the site’s logo (extract from the logo image and set them as CSS variables; also create sensible neutrals for light/dark mode). The final UI must feel premium, clean, bold, and mobile-first.
+
+TECH STACK (use exactly this unless impossible):
+
+Frontend: Next.js (App Router) + TypeScript + TailwindCSS + shadcn/ui
+
+Auth + DB: Supabase (Auth, Postgres, Storage)
+
+Payments: Stripe (one-time + subscription support; include webhooks)
+
+i18n: next-intl (or next-i18next) with language switcher + persistent locale
+
+Rich text: TipTap or MDX for course content editing
+
+Charts: Recharts for dashboards
+
+Testing: basic Playwright smoke tests for auth + checkout + course access
+
+Deployment-ready: Replit-compatible, env vars documented, seed script
+
+
+INFORMATION & CONTENT (source of truth):
+
+Pull/copy the existing content and messaging from biblicalfinancialcourses.com where possible (headline/tagline: “A clear path to biblical stewardship.” and the idea of “Six focused tracks blend Scripture, practical exercises, and community…”). Create a structured content model so the admin can edit everything later.
+
+If any pages are not crawlable due to JS, create a reasonable page set based on what is visible + standard course platform best practices, but keep the brand voice aligned: biblical stewardship, practical exercises, community, purposeful resource management.
+
+
+SITE MAP / PAGES (build all):
+
+1. Marketing:
+
+
+
+Home
+
+Courses (collections / tracks)
+
+Individual Course Page (Miss Excel style scrolling layout)
+
+Bundles / Tracks page (show 6 tracks)
+
+About
+
+Community (gated overview page + inside community for members)
+
+FAQ
+
+Contact
+
+Blog / Insights (optional but scaffold it)
+
+Legal: Terms, Privacy, Refund Policy
+
+
+2. Auth:
+
+
+
+Sign up / Sign in
+
+Forgot password
+
+Verify email
+
+Account settings
+
+
+3. User Dashboard (heavy focus):
+
+
+
+Dashboard home: progress summary, continue learning, streak, next recommended lesson
+
+My Courses: enrolled courses, progress bars, certificates (PDF), access status
+
+Course Player: video + transcript + notes + resources + lesson checklist + next lesson
+
+Community: posts, comments, likes, pinned announcements (basic forum style)
+
+Downloads/Resources library
+
+Billing: invoices, plan, cancel/resume, receipts
+
+Profile: preferences (language, dark mode, email notifications)
+
+
+4. Admin Dashboard (heavy focus):
+
+
+
+Admin overview: revenue, active users, enrollments, course completion rates, churn (if subscription), top courses, traffic snapshot (basic)
+
+Course Builder (CRUD):
+
+Tracks (6 tracks)
+
+Courses
+
+Modules
+
+Lessons (video URL, transcript, duration, resources, quizzes)
+
+Pricing rules (free/paid/subscription, drip schedule optional)
+
+
+Content CMS:
+
+Edit homepage sections (hero, testimonials, features, CTAs)
+
+Edit about, faq, contact, policies
+
+
+User Management:
+
+Roles (admin, instructor, student)
+
+Grant/revoke course access, comp coupons, manual enrollments
+
+
+Orders & Subscriptions:
+
+Stripe sync, webhook event log, refunds notes (manual)
+
+
+Community moderation:
+
+Remove posts/comments, ban users, announcements
+
+
+Localization manager:
+
+Edit translations by key for EN/SWA/FR/AR/PT
+
+Arabic RTL support across UI
+
+
+
+MISS EXCEL–STYLE INDIVIDUAL COURSE PAGE (must match this scroll arrangement): Implement a reusable “Course Sales Page Template” with these sections in this exact order:
+
+1. Hero: outcome-driven headline, short subcopy, course snapshot (level, duration), primary CTA (Enroll), secondary CTA (View curriculum), sticky enroll bar on scroll
+
+
+2. “This course is for you if…” vs “Not for you if…” (two columns)
+
+
+3. Relatable pain/story block (brand voice, stewardship angle)
+
+
+4. Before → After transformation (side-by-side)
+
+
+5. What you’ll learn (outcome bullets, not features)
+
+
+6. Curriculum accordion (modules + lesson counts + time)
+
+
+7. Social proof carousel (testimonials; if missing, add placeholders the admin can replace)
+
+
+8. Instructor authority block
+
+
+9. Bonus stack (downloadables, templates, community access)
+
+
+10. Pricing + guarantee/risk reversal box (configurable)
+
+
+11. FAQ (course-specific)
+
+
+12. Final CTA section (strong close) All CTAs should open checkout if paid, or enroll if free. Use microinteractions, clean spacing, large typography, and mobile-first layout.
+
+
+
+DESIGN REQUIREMENTS:
+
+Urbanist font loaded via next/font
+
+Dark mode toggle (system default + manual override, persist to user profile)
+
+Language switcher in header + dashboard, persist selection
+
+Arabic must be RTL (layout flips correctly)
+
+Use logo colors:
+
+Programmatically fetch the logo from the existing site (or manually place it in /public) and extract 2 dominant brand colors at build/dev time, then set CSS variables: --brand-primary, --brand-secondary
+
+Build a full palette (light/dark neutrals, borders, muted, success/warn/error) that complements those colors
+
+
+Components: shadcn/ui styling with Tailwind
+
+Accessibility: proper contrast, keyboard navigation, aria labels
+
+
+DATA MODELS (Supabase/Postgres):
+
+users (supabase auth)
+
+profiles (name, avatar, locale, theme)
+
+tracks
+
+courses
+
+modules
+
+lessons
+
+resources
+
+enrollments
+
+progress (lesson completion, timestamps)
+
+certificates
+
+community_posts, community_comments
+
+orders (stripe), subscriptions, coupons
+
+testimonials (global + course-specific)
+
+site_sections (CMS blocks)
+
+translations (key, locale, value) Include SQL migrations and seed data for 6 tracks + a couple sample courses.
+
+
+SECURITY / RBAC:
+
+RLS policies in Supabase:
+
+Students can only see enrolled content
+
+Admin can manage everything
+
+Community: only logged-in users can post/comment; admins moderate
+
+
+Protect admin routes server-side
+
+
+DELIVERABLES:
+
+A fully running app in Replit with clear “Run” instructions
+
+.env.example with all required keys
+
+Stripe webhook endpoint implemented
+
+Seed script and minimal demo content
+
+Clean README explaining:
+
+how to add courses/tracks
+
+how to translate content
+
+how to customize colors from logo
+
+how to create admin user
+
+
+
+Build it now. Prioritize the dashboards and the course sales page template. Make the UX feel like a premium online course brand.
