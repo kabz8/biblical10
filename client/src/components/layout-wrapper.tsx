@@ -27,7 +27,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-primary/20">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 w-full border-b bg-background shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <img src={logoPng} alt="Biblical Financial Courses" className="h-10 w-auto" />
@@ -35,40 +35,40 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
 
           <nav className="hidden lg:flex items-center gap-6">
             <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              <DropdownMenuTrigger className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 outline-none">
                 Faith Activities <ChevronDown className="w-4 h-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem className="font-bold text-xs uppercase text-muted-foreground px-2 py-1">Spiritual Growth</DropdownMenuItem>
-                <DropdownMenuItem>Worship</DropdownMenuItem>
-                <DropdownMenuItem>Reading</DropdownMenuItem>
-                <DropdownMenuItem>Meditation</DropdownMenuItem>
+              <DropdownMenuContent className="w-56">
+                <div className="font-bold text-[10px] uppercase text-muted-foreground/60 px-2 py-1.5 tracking-widest">Spiritual Growth</div>
+                <DropdownMenuItem className="cursor-pointer">Worship</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Reading</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Meditation</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="font-bold text-xs uppercase text-muted-foreground px-2 py-1">Community</DropdownMenuItem>
-                <DropdownMenuItem>Games</DropdownMenuItem>
-                <DropdownMenuItem>Testimonies</DropdownMenuItem>
-                <DropdownMenuItem>Prayers</DropdownMenuItem>
+                <div className="font-bold text-[10px] uppercase text-muted-foreground/60 px-2 py-1.5 tracking-widest">Community</div>
+                <DropdownMenuItem className="cursor-pointer">Games</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Testimonies</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Prayers</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              <DropdownMenuTrigger className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 outline-none">
                 Along Activities <ChevronDown className="w-4 h-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Testimony Along</DropdownMenuItem>
-                <DropdownMenuItem>Pray Along</DropdownMenuItem>
-                <DropdownMenuItem>Sing Along</DropdownMenuItem>
-                <DropdownMenuItem>Read Along</DropdownMenuItem>
-                <DropdownMenuItem>Meditate Along</DropdownMenuItem>
-                <DropdownMenuItem>Game Along</DropdownMenuItem>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuItem className="cursor-pointer">Testimony Along</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Pray Along</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Sing Along</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Read Along</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Meditate Along</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Game Along</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/" className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors">
               Courses
             </Link>
-            <Link href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="#" className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors">
               Donate
             </Link>
           </nav>
