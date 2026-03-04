@@ -37,14 +37,14 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <div className="font-bold text-[10px] uppercase text-muted-foreground/60 px-2 py-1.5 tracking-widest">Spiritual Growth</div>
-          <DropdownMenuItem className="cursor-pointer">Worship</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Reading</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Meditation</DropdownMenuItem>
+          <Link href="/worship"><DropdownMenuItem className="cursor-pointer">Worship</DropdownMenuItem></Link>
+          <Link href="/reading"><DropdownMenuItem className="cursor-pointer">Reading</DropdownMenuItem></Link>
+          <Link href="/meditation"><DropdownMenuItem className="cursor-pointer">Meditation</DropdownMenuItem></Link>
           <DropdownMenuSeparator />
           <div className="font-bold text-[10px] uppercase text-muted-foreground/60 px-2 py-1.5 tracking-widest">Community</div>
-          <DropdownMenuItem className="cursor-pointer">Games</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Testimonies</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Prayers</DropdownMenuItem>
+          <Link href="/games"><DropdownMenuItem className="cursor-pointer">Games</DropdownMenuItem></Link>
+          <Link href="/testimonies"><DropdownMenuItem className="cursor-pointer">Testimonies</DropdownMenuItem></Link>
+          <Link href="/prayers"><DropdownMenuItem className="cursor-pointer">Prayers</DropdownMenuItem></Link>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -53,12 +53,12 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
           Along Activities <ChevronDown className="w-4 h-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuItem className="cursor-pointer">Testimony Along</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Pray Along</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Sing Along</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Read Along</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Meditate Along</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Game Along</DropdownMenuItem>
+          <Link href="/testimony-along"><DropdownMenuItem className="cursor-pointer">Testimony Along</DropdownMenuItem></Link>
+          <Link href="/pray-along"><DropdownMenuItem className="cursor-pointer">Pray Along</DropdownMenuItem></Link>
+          <Link href="/sing-along"><DropdownMenuItem className="cursor-pointer">Sing Along</DropdownMenuItem></Link>
+          <Link href="/read-along"><DropdownMenuItem className="cursor-pointer">Read Along</DropdownMenuItem></Link>
+          <Link href="/meditate-along"><DropdownMenuItem className="cursor-pointer">Meditate Along</DropdownMenuItem></Link>
+          <Link href="/game-along"><DropdownMenuItem className="cursor-pointer">Game Along</DropdownMenuItem></Link>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -230,25 +230,25 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
             <div className="flex flex-col items-center sm:items-start">
               <h4 className="font-bold text-lg mb-6">Faith Activities</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><Link href="#" className="hover:text-primary transition-colors">Worship</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Reading</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Meditation</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Games</Link></li>
+                <li><Link href="/worship" className="hover:text-primary transition-colors">Worship</Link></li>
+                <li><Link href="/reading" className="hover:text-primary transition-colors">Reading</Link></li>
+                <li><Link href="/meditation" className="hover:text-primary transition-colors">Meditation</Link></li>
+                <li><Link href="/games" className="hover:text-primary transition-colors">Games</Link></li>
               </ul>
             </div>
 
             <div className="flex flex-col items-center sm:items-start">
               <h4 className="font-bold text-lg mb-6">Community</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><Link href="#" className="hover:text-primary transition-colors">Testimonies</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Prayers</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Donate</Link></li>
+                <li><Link href="/testimonies" className="hover:text-primary transition-colors">Testimonies</Link></li>
+                <li><Link href="/prayers" className="hover:text-primary transition-colors">Prayers</Link></li>
+                <li><Link href="/donate" className="hover:text-primary transition-colors">Donate</Link></li>
               </ul>
               <h4 className="font-bold text-lg mt-8 mb-6">Along Activities</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><Link href="#" className="hover:text-primary transition-colors">Testimony Along</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Pray Along</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Sing Along</Link></li>
+                <li><Link href="/testimony-along" className="hover:text-primary transition-colors">Testimony Along</Link></li>
+                <li><Link href="/pray-along" className="hover:text-primary transition-colors">Pray Along</Link></li>
+                <li><Link href="/sing-along" className="hover:text-primary transition-colors">Sing Along</Link></li>
               </ul>
             </div>
 
