@@ -148,9 +148,11 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild className="rounded-full font-bold text-sm h-9 px-4 shadow-sm hover:shadow-md transition-all">
-                <a href="/api/login">Login</a>
-              </Button>
+              <Link href="/auth">
+                <Button className="rounded-full font-bold text-sm h-9 px-4 shadow-sm hover:shadow-md transition-all">
+                  Login
+                </Button>
+              </Link>
             )}
 
             {/* Mobile Menu Trigger */}

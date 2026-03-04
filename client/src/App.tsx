@@ -13,6 +13,7 @@ import CourseLanding from "@/pages/course-landing";
 import Dashboard from "@/pages/dashboard";
 import CoursePlayer from "@/pages/course-player";
 import AdminDashboard from "@/pages/admin-dashboard";
+import AuthPage from "@/pages/auth-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
     <LayoutWrapper>
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/auth" component={AuthPage} />
         <Route path="/courses/:slug" component={CourseLanding} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/learn/:slug" component={CoursePlayer} />

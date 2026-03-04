@@ -35,7 +35,7 @@ export async function registerRoutes(
   });
 
   app.get(api.enrollments.list.path, isAuthenticated, async (req: any, res) => {
-    const userId = req.user.claims.sub;
+    const userId = req.user.id;
     const enrollmentsList = await storage.getEnrollments(userId);
     res.json(enrollmentsList);
   });
@@ -43,7 +43,7 @@ export async function registerRoutes(
   app.post(api.enrollments.create.path, isAuthenticated, async (req: any, res) => {
     try {
       const input = api.enrollments.create.input.parse(req.body);
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const enrollment = await storage.createEnrollment(userId, input.courseId);
       res.status(201).json(enrollment);
     } catch (err) {
@@ -58,7 +58,7 @@ export async function registerRoutes(
   });
 
   app.get(api.progress.list.path, isAuthenticated, async (req: any, res) => {
-    const userId = req.user.claims.sub;
+    const userId = req.user.id;
     const progressList = await storage.getProgress(userId);
     res.json(progressList);
   });
@@ -66,7 +66,7 @@ export async function registerRoutes(
   app.post(api.progress.markComplete.path, isAuthenticated, async (req: any, res) => {
     try {
       const input = api.progress.markComplete.input.parse(req.body);
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const progressRecord = await storage.markLessonComplete(userId, input.lessonId);
       res.status(201).json(progressRecord);
     } catch (err) {
