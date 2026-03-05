@@ -1,11 +1,12 @@
 import { db } from "./db";
 import {
-  tracks, courses, modules, lessons, enrollments, progress, profiles,
-  type Track, type Course, type Module, type Lesson, type Enrollment, type Progress, type Profile
+  tracks, courses, modules, lessons, enrollments, progress, profiles, activitySubmissions,
+  type Track, type Course, type Module, type Lesson, type Enrollment, type Progress, type Profile,
+  type ActivitySubmission, type InsertActivitySubmission
 } from "@shared/schema";
 import { z } from "zod";
 import { createInsertSchema } from "drizzle-zod";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 type InsertTrack = typeof tracks.$inferInsert;
 type InsertCourse = typeof courses.$inferInsert;
@@ -30,6 +31,10 @@ export interface IStorage {
   // Progress
   getProgress(userId: string): Promise<Progress[]>;
   markLessonComplete(userId: string, lessonId: number): Promise<Progress>;
+
+  // Activity Submissions
+  createActivitySubmission(submission: InsertActivitySubmission): Promise<ActivitySubmission>;
+  getActivitySubmissions(type: string): Promise<ActivitySubmission[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -83,6 +88,15 @@ export class DatabaseStorage implements IStorage {
       lessonId,
     }).returning();
     return newProgress;
+  }
+
+  async createActivitySubmission(submission: InsertActivitySubmission): Promise<ActivitySubmission> {
+    const [newSubmission] = await db.insert(activitySubmissions).values(submission).returning();
+    return newSubmission;
+  }
+
+  async getActivitySubmissions(type: string): Promise<ActivitySubmission[]> {
+    return await db.select().from(activitySubmissions).where(eq(activitySubmissions.activityType, type)).orderBy(activitySubmissions.submittedAt);
   }
 }
 

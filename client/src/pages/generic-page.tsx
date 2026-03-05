@@ -3,10 +3,21 @@ import {
   Music, BookOpen, ScrollText, Gamepad2, 
   MessageSquare, HeartHandshake, Mic2, 
   BookMarked, Headphones, PlayCircle,
-  TrendingUp, Users, Sparkles, ChevronRight
+  TrendingUp, Users, Sparkles, ChevronRight,
+  Upload, Send
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { insertActivitySubmissionSchema } from "@shared/schema";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useAuth } from "@/hooks/use-auth";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 const pageContent: Record<string, any> = {
   Worship: {
@@ -117,6 +128,45 @@ const pageContent: Record<string, any> = {
 
 export default function GenericPage({ title }: { title: string }) {
   const { t } = useTranslation();
+  const { user, isAuthenticated } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const isAlongActivity = title.toLowerCase().includes("along");
+
+  const form = useForm({
+    resolver: zodResolver(insertActivitySubmissionSchema.omit({ userId: true, activityType: true })),
+    defaultValues: {
+      title: "",
+      content: "",
+      mediaUrl: ""
+    }
+  });
+
+  const mutation = useMutation({
+    mutationFn: async (data: any) => {
+      await apiRequest("POST", "/api/activity-submissions", {
+        ...data,
+        activityType: title.toLowerCase().replace(/\s+/g, '-')
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "Your submission has been received. Thank you for sharing!",
+      });
+      form.reset();
+      queryClient.invalidateQueries({ queryKey: ["/api/activity-submissions", title.toLowerCase().replace(/\s+/g, '-')] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+
   const content = pageContent[title] || {
     icon: <Sparkles className="w-12 h-12 text-primary" />,
     description: "Explore the wealth of spiritual and practical resources available in our community.",
@@ -146,28 +196,115 @@ export default function GenericPage({ title }: { title: string }) {
 
       {/* Main Content Grid */}
       <section className="container mx-auto px-4 py-20">
-        <div className="grid md:grid-cols-2 gap-10">
-          {content.sections.map((section: any, index: number) => (
-            <Card key={index} className="group border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-card overflow-hidden">
-              <div className="h-1 w-full bg-primary/20 group-hover:bg-primary transition-colors" />
-              <CardHeader className="pt-8 px-8">
-                <CardTitle className="text-2xl font-bold flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-bold">
-                    {index + 1}
-                  </span>
-                  {t(section.title)}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-8 pb-8">
-                <p className="text-muted-foreground text-lg leading-relaxed">
-                  {t(section.content)}
-                </p>
-                <Button variant="link" className="mt-6 p-0 text-primary font-bold group-hover:translate-x-1 transition-transform">
-                  Read more <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="grid lg:grid-cols-3 gap-10">
+          <div className={`${isAlongActivity ? 'lg:col-span-2' : 'lg:col-span-3'} grid md:grid-cols-2 gap-10`}>
+            {content.sections.map((section: any, index: number) => (
+              <Card key={index} className="group border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-card overflow-hidden">
+                <div className="h-1 w-full bg-primary/20 group-hover:bg-primary transition-colors" />
+                <CardHeader className="pt-8 px-8">
+                  <CardTitle className="text-2xl font-bold flex items-center gap-3">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-bold">
+                      {index + 1}
+                    </span>
+                    {t(section.title)}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-8 pb-8">
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    {t(section.content)}
+                  </p>
+                  <Button variant="link" className="mt-6 p-0 text-primary font-bold group-hover:translate-x-1 transition-transform">
+                    Read more <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Submission Form for Along Activities */}
+          {isAlongActivity && (
+            <div className="lg:col-span-1">
+              <Card className="sticky top-24 border-primary/10 shadow-xl overflow-hidden">
+                <div className="h-2 w-full bg-primary" />
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                    <Send className="w-5 h-5 text-primary" />
+                    Share Your {title.split(' ')[0]}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {!isAuthenticated ? (
+                    <div className="text-center py-6">
+                      <p className="text-muted-foreground mb-4">Please log in to share your activity with the community.</p>
+                      <Button asChild className="w-full font-bold">
+                        <a href="/auth">Login to Submit</a>
+                      </Button>
+                    </div>
+                  ) : (
+                    <Form {...form}>
+                      <form onSubmit={form.handleSubmit((data) => mutation.mutate(data))} className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="title"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Title</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Give it a name..." {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="content"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Description / Content</FormLabel>
+                              <FormControl>
+                                <Textarea 
+                                  placeholder="Share your experience or upload details..." 
+                                  className="min-h-[120px]"
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="mediaUrl"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Media URL (Optional)</FormLabel>
+                              <FormControl>
+                                <div className="flex gap-2">
+                                  <Input placeholder="Link to video, audio or image..." {...field} />
+                                  <Button type="button" variant="outline" size="icon" className="shrink-0">
+                                    <Upload className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button 
+                          type="submit" 
+                          className="w-full font-bold h-12 text-lg" 
+                          disabled={mutation.isPending}
+                        >
+                          {mutation.isPending ? "Submitting..." : `Post ${title.split(' ')[0]}`}
+                        </Button>
+                      </form>
+                    </Form>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
 
         {/* Call to Action Banner */}
@@ -194,3 +331,4 @@ export default function GenericPage({ title }: { title: string }) {
     </div>
   );
 }
+

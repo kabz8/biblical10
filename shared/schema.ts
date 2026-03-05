@@ -69,6 +69,20 @@ export const progress = pgTable("progress", {
   completedAt: timestamp("completed_at").defaultNow(),
 });
 
+export const activitySubmissions = pgTable("activity_submissions", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  activityType: text("activity_type").notNull(), // e.g., 'testimony-along', 'pray-along', etc.
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  mediaUrl: text("media_url"),
+  submittedAt: timestamp("submitted_at").defaultNow(),
+});
+
+export const insertActivitySubmissionSchema = createInsertSchema(activitySubmissions).omit({ id: true, submittedAt: true });
+export type ActivitySubmission = typeof activitySubmissions.$inferSelect;
+export type InsertActivitySubmission = z.infer<typeof insertActivitySubmissionSchema>;
+
 export const coursesRelations = relations(courses, ({ one, many }) => ({
   track: one(tracks, {
     fields: [courses.trackId],

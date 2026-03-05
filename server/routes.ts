@@ -6,6 +6,8 @@ import { z } from "zod";
 import { registerAuthRoutes, setupAuth } from "./replit_integrations/auth";
 import { isAuthenticated } from "./replit_integrations/auth/replitAuth";
 
+import { insertActivitySubmissionSchema } from "@shared/schema";
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -15,6 +17,27 @@ export async function registerRoutes(
   
   // Register Auth Routes
   registerAuthRoutes(app);
+
+  app.get("/api/activity-submissions/:type", async (req, res) => {
+    const submissions = await storage.getActivitySubmissions(req.params.type);
+    res.json(submissions);
+  });
+
+  app.post("/api/activity-submissions", isAuthenticated, async (req: any, res) => {
+    try {
+      const data = insertActivitySubmissionSchema.parse({
+        ...req.body,
+        userId: req.user.id
+      });
+      const submission = await storage.createActivitySubmission(data);
+      res.status(201).json(submission);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0].message });
+      }
+      res.status(500).json({ message: "Failed to create submission" });
+    }
+  });
 
   app.get(api.tracks.list.path, async (req, res) => {
     const tracksList = await storage.getTracks();
