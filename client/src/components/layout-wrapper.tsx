@@ -78,10 +78,10 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-primary/20">
       <header className="sticky top-0 z-50 w-full border-b bg-background shadow-sm">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <Link href="/">
             <a className="flex items-center gap-2 group shrink-0">
-              <img src={logoPng} alt="Biblical Financial Courses" className="h-8 md:h-10 w-auto" />
+              <img src={logoPng} alt="Biblical Financial Courses" className="h-12 md:h-14 w-auto" />
             </a>
           </Link>
 
