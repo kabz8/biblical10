@@ -62,15 +62,11 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Link href="/">
-        <a className={`${mobile ? 'py-2 block' : ''} text-sm font-bold text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap ${location === '/' ? 'text-primary' : ''}`}>
-          Courses
-        </a>
+      <Link href="/" className={`${mobile ? 'py-2 block' : ''} text-sm font-bold text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap ${location === '/' ? 'text-primary' : ''}`}>
+        Courses
       </Link>
-      <Link href="/donate">
-        <a className={`${mobile ? 'py-2 block' : ''} text-sm font-bold text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap ${location === '/donate' ? 'text-primary' : ''}`}>
-          Donate
-        </a>
+      <Link href="/donate" className={`${mobile ? 'py-2 block' : ''} text-sm font-bold text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap ${location === '/donate' ? 'text-primary' : ''}`}>
+        Donate
       </Link>
     </>
   );
@@ -79,10 +75,8 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col font-sans selection:bg-primary/20">
       <header className="sticky top-0 z-50 w-full border-b bg-background shadow-sm">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-          <Link href="/">
-            <a className="flex items-center gap-2 group shrink-0">
-              <img src={logoPng} alt="Biblical Financial Courses" className="h-12 md:h-14 w-auto" />
-            </a>
+          <Link href="/" className="flex items-center gap-2 group shrink-0">
+            <img src={logoPng} alt="Biblical Financial Courses" className="h-12 md:h-14 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
