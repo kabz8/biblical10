@@ -1,0 +1,58 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+[1G[0K[seed] Database upserted: 4 tracks, 6 courses.
+4:15:33 PM [express] serving on port 5000
+4:15:40 PM [express] GET /api/auth/user 401 in 3ms :: {"message":"Unauthorized"}
+4:15:40 PM [express] GET /api/courses 304 in 4ms :: [{"id":1,"trackId":1,"slug":"stewardship-101","title":"Stewardship 101","description":"A comprehensive introduction to biblical financial management. Learn what the Bible says about money, resources, and your role as a steward.","price":0,"level":"beginner","duration":"4 hours","imageUrl":null,"isPublished":true},{"id":2,"trackId":1,"slug":"budgeting-masterclass","title":"Budgeting Masterclass","description":"Take control of your cash flow with practical, Bible-based budgeting tools. Build a spending plan that reflects your values.","price":9900,"level":"intermediate","duration":"6 hours","imageUrl":null,"isPublished":true},{"id":5,"trackId":2,"slug":"kingdom-investing","title":"Kingdom Investing Principles","description":"Learn how to grow your wealth while keeping an eternal perspective. Biblical wisdom for the stock market, real estate, and business.","price":14900,"level":"intermediate","duration":"8 hours","imageUrl":null,"isPublished":true},{"id":6,"trackId":2,"slug":"retirement-gods-way","title":"Retirement God's Way","description":"Plan for the future with faith and wisdom. How to save, invest, and leave a godly legacy for the next generation.","price":12900,"level":"advanced","duration":"5 hours","imageUrl":null,"isPublished":true},{"id":7,"trackId":5,"slug":"debt-freedom-plan","title":"The Debt Freedom Plan","description":"A proven, Scripture-backed system for eliminating all consumer debt and achieving true financial freedom in Christ.","price":7900,"level":"beginner","duration":"6 hours","imageUrl":null,"isPublished":true},{"id":8,"trackId":6,"slug":"radical-generosity","title":"Radical Generosity","description":"Experience the transforming power of giving. Learn the principles of tithing, offerings, and how generosity unlocks God's blessing.","price":0,"level":"beginner","duration":"3 hours","imageUrl":null,"isPublished":true}]
+4:15:40 PM [express] GET /api/auth/user 401 in 0ms :: {"message":"Unauthorized"}
+4:15:40 PM [express] GET /api/courses 200 in 2ms :: [{"id":1,"trackId":1,"slug":"stewardship-101","title":"Stewardship 101","description":"A comprehensive introduction to biblical financial management. Learn what the Bible says about money, resources, and your role as a steward.","price":0,"level":"beginner","duration":"4 hours","imageUrl":null,"isPublished":true},{"id":2,"trackId":1,"slug":"budgeting-masterclass","title":"Budgeting Masterclass","description":"Take control of your cash flow with practical, Bible-based budgeting tools. Build a spending plan that reflects your values.","price":9900,"level":"intermediate","duration":"6 hours","imageUrl":null,"isPublished":true},{"id":5,"trackId":2,"slug":"kingdom-investing","title":"Kingdom Investing Principles","description":"Learn how to grow your wealth while keeping an eternal perspective. Biblical wisdom for the stock market, real estate, and business.","price":14900,"level":"intermediate","duration":"8 hours","imageUrl":null,"isPublished":true},{"id":6,"trackId":2,"slug":"retirement-gods-way","title":"Retirement God's Way","description":"Plan for the future with faith and wisdom. How to save, invest, and leave a godly legacy for the next generation.","price":12900,"level":"advanced","duration":"5 hours","imageUrl":null,"isPublished":true},{"id":7,"trackId":5,"slug":"debt-freedom-plan","title":"The Debt Freedom Plan","description":"A proven, Scripture-backed system for eliminating all consumer debt and achieving true financial freedom in Christ.","price":7900,"level":"beginner","duration":"6 hours","imageUrl":null,"isPublished":true},{"id":8,"trackId":6,"slug":"radical-generosity","title":"Radical Generosity","description":"Experience the transforming power of giving. Learn the principles of tithing, offerings, and how generosity unlocks God's blessing.","price":0,"level":"beginner","duration":"3 hours","imageUrl":null,"isPublished":true}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m4:17:08 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/home.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m4:17:14 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/home.tsx, /src/index.css[22m [33m(x2)[39m

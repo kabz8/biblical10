@@ -1,0 +1,57 @@
+[1G[0K⠙[1G[0K
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+[1G[0K⠙[1G[0K3:46:21 PM [express] serving on port 5000
+3:47:02 PM [express] GET /api/auth/user 401 in 1ms :: {"message":"Unauthorized"}
+3:47:02 PM [express] GET /api/courses 200 in 25ms :: [{"id":1,"trackId":1,"slug":"stewardship-101","title":"Stewardship 101","description":"A comprehensive introduction to biblical financial management.","price":0,"level":"beginner","duration":"4 hours","imageUrl":null,"isPublished":true},{"id":2,"trackId":1,"slug":"budgeting-masterclass","title":"Budgeting Masterclass","description":"Take control of your cash flow with practical budgeting tools.","price":9900,"level":"intermediate","duration":"6 hours","imageUrl":null,"isPublished":true}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m3:55:55 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m3:56:04 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mindex.html[22m
+3:56:14 PM [express] GET /api/auth/user 401 in 1ms :: {"message":"Unauthorized"}
+3:56:14 PM [express] GET /api/courses 304 in 10ms :: [{"id":1,"trackId":1,"slug":"stewardship-101","title":"Stewardship 101","description":"A comprehensive introduction to biblical financial management.","price":0,"level":"beginner","duration":"4 hours","imageUrl":null,"isPublished":true},{"id":2,"trackId":1,"slug":"budgeting-masterclass","title":"Budgeting Masterclass","description":"Take control of your cash flow with practical budgeting tools.","price":9900,"level":"intermediate","duration":"6 hours","imageUrl":null,"isPublished":true}]

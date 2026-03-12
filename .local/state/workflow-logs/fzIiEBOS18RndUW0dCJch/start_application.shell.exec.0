@@ -1,0 +1,157 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+[1G[0K3:56:31 PM [express] serving on port 5000
+3:56:37 PM [express] GET /api/auth/user 401 in 2ms :: {"message":"Unauthorized"}
+3:56:37 PM [express] GET /api/courses 304 in 6ms :: [{"id":1,"trackId":1,"slug":"stewardship-101","title":"Stewardship 101","description":"A comprehensive introduction to biblical financial management.","price":0,"level":"beginner","duration":"4 hours","imageUrl":null,"isPublished":true},{"id":2,"trackId":1,"slug":"budgeting-masterclass","title":"Budgeting Masterclass","description":"Take control of your cash flow with practical budgeting tools.","price":9900,"level":"intermediate","duration":"6 hours","imageUrl":null,"isPublished":true}]
+3:56:38 PM [express] GET /api/courses 200 in 3ms :: [{"id":1,"trackId":1,"slug":"stewardship-101","title":"Stewardship 101","description":"A comprehensive introduction to biblical financial management.","price":0,"level":"beginner","duration":"4 hours","imageUrl":null,"isPublished":true},{"id":2,"trackId":1,"slug":"budgeting-masterclass","title":"Budgeting Masterclass","description":"Take control of your cash flow with practical budgeting tools.","price":9900,"level":"intermediate","duration":"6 hours","imageUrl":null,"isPublished":true}]
+3:56:38 PM [express] GET /api/auth/user 401 in 1ms :: {"message":"Unauthorized"}
+3:56:45 PM [express] GET /api/enrollments 401 in 1ms :: {"message":"Unauthorized"}
+3:56:45 PM [express] GET /api/courses/stewardship-101 200 in 8ms :: {"id":1,"trackId":1,"slug":"stewardship-101","title":"Stewardship 101","description":"A comprehensive introduction to biblical financial management.","price":0,"level":"beginner","duration":"4 hours","imageUrl":null,"isPublished":true}
+3:56:53 PM [express] GET /api/auth/user 401 in 1ms :: {"message":"Unauthorized"}
+3:56:53 PM [express] GET /api/courses 304 in 3ms :: [{"id":1,"trackId":1,"slug":"stewardship-101","title":"Stewardship 101","description":"A comprehensive introduction to biblical financial management.","price":0,"level":"beginner","duration":"4 hours","imageUrl":null,"isPublished":true},{"id":2,"trackId":1,"slug":"budgeting-masterclass","title":"Budgeting Masterclass","description":"Take control of your cash flow with practical budgeting tools.","price":9900,"level":"intermediate","duration":"6 hours","imageUrl":null,"isPublished":true}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m4:02:02 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/game-along.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m4:02:42 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/meditate-along.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m4:03:22 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/sing-along.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m4:04:11 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/pray-along.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m4:04:45 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/read-along.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m4:08:32 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/testimony-along.tsx, /src/index.css[22m
