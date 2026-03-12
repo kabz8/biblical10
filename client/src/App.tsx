@@ -15,6 +15,12 @@ import CoursePlayer from "@/pages/course-player";
 import AdminDashboard from "@/pages/admin-dashboard";
 import AuthPage from "@/pages/auth-page";
 import GenericPage from "@/pages/generic-page";
+import GameAlong from "@/pages/game-along";
+import MeditateAlong from "@/pages/meditate-along";
+import SingAlong from "@/pages/sing-along";
+import TestimonyAlong from "@/pages/testimony-along";
+import PrayAlong from "@/pages/pray-along";
+import ReadAlong from "@/pages/read-along";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -36,13 +42,13 @@ function Router() {
         <Route path="/testimonies"><GenericPage title="Testimonies" /></Route>
         <Route path="/prayers"><GenericPage title="Prayers" /></Route>
 
-        {/* Along Activities */}
-        <Route path="/testimony-along"><GenericPage title="Testimony Along" /></Route>
-        <Route path="/pray-along"><GenericPage title="Pray Along" /></Route>
-        <Route path="/sing-along"><GenericPage title="Sing Along" /></Route>
-        <Route path="/read-along"><GenericPage title="Read Along" /></Route>
-        <Route path="/meditate-along"><GenericPage title="Meditate Along" /></Route>
-        <Route path="/game-along"><GenericPage title="Game Along" /></Route>
+        {/* Along Activities — dedicated rich pages */}
+        <Route path="/testimony-along" component={TestimonyAlong} />
+        <Route path="/pray-along" component={PrayAlong} />
+        <Route path="/sing-along" component={SingAlong} />
+        <Route path="/read-along" component={ReadAlong} />
+        <Route path="/meditate-along" component={MeditateAlong} />
+        <Route path="/game-along" component={GameAlong} />
 
         {/* Other */}
         <Route path="/donate"><GenericPage title="Donate" /></Route>
