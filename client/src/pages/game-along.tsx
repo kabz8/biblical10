@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Gamepad2, Trophy, Users, Clock, Star, Zap, BookOpen, Brain, Target, Award, Timer, Crown } from "lucide-react";
+import { Gamepad2, Trophy, Users, Clock, Star, Zap, BookOpen, Brain, Target } from "lucide-react";
+import { useActionCTA } from "@/hooks/use-action-cta";
 
 const liveSessions = [
   { id: 1, category: "Trivia", tag: "Live", level: "All Levels", title: "Bible Trivia Challenge", description: "Test your Bible knowledge in this fast-paced trivia game.", players: "23/50", host: "Pastor John", status: "Starting in 5 minutes", action: "Join Now", actionStyle: "bg-primary" },
@@ -14,10 +15,10 @@ const liveSessions = [
 ];
 
 const tournaments = [
-  { id: 1, tag: "Tournament", level: "All Levels", title: "Christmas Bible Bowl", description: "Annual Christmas-themed Bible knowledge competition.", start: "December 20, 2026", duration: "3 days", prize: "Christmas Gift Basket", registered: "67 registered", ends: "December 15", color: "bg-primary" },
-  { id: 2, tag: "Tournament", level: "Advanced", title: "New Testament Marathon", description: "Comprehensive competition covering all New Testament books.", start: "January 10, 2026", duration: "5 weeks", prize: "Study Bible + Amazon Gift Card", registered: "54 registered", ends: "January 10", color: "bg-primary" },
-  { id: 3, tag: "Youth", level: "Youth", title: "Youth Bible Games", description: "Special tournament designed for teenagers and young adults.", start: "February 1, 2026", duration: "2 days", prize: "Youth Group-themed Scholarship", registered: "41 registered", ends: "January 25", color: "bg-primary" },
-  { id: 4, tag: "Tournament", level: "Intermediate", title: "Psalms Poetry Contest", description: "Creative games based on the poetic books of the Bible.", start: "March 10, 2026", duration: "3 weeks", prize: "Poetry Book Collection", registered: "29 registered", ends: "March 2", color: "bg-primary" },
+  { id: 1, tag: "Tournament", level: "All Levels", title: "Christmas Bible Bowl", description: "Annual Christmas-themed Bible knowledge competition.", start: "December 20, 2026", duration: "3 days", prize: "Christmas Gift Basket", registered: "67 registered", ends: "December 15" },
+  { id: 2, tag: "Tournament", level: "Advanced", title: "New Testament Marathon", description: "Comprehensive competition covering all New Testament books.", start: "January 10, 2026", duration: "5 weeks", prize: "Study Bible + Amazon Gift Card", registered: "54 registered", ends: "January 10" },
+  { id: 3, tag: "Youth", level: "Youth", title: "Youth Bible Games", description: "Special tournament designed for teenagers and young adults.", start: "February 1, 2026", duration: "2 days", prize: "Youth Group-themed Scholarship", registered: "41 registered", ends: "January 25" },
+  { id: 4, tag: "Tournament", level: "Intermediate", title: "Psalms Poetry Contest", description: "Creative games based on the poetic books of the Bible.", start: "March 10, 2026", duration: "3 weeks", prize: "Poetry Book Collection", registered: "29 registered", ends: "March 2" },
 ];
 
 const categories = [
@@ -59,6 +60,8 @@ const tips = [
 ];
 
 export default function GameAlong() {
+  const { joinSession, registerTournament, explore, joinCommunity } = useActionCTA();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
@@ -94,7 +97,12 @@ export default function GameAlong() {
                   <div className="flex justify-between"><span>Host:</span><span className="font-medium text-foreground">{s.host}</span></div>
                   <div className="flex justify-between"><span>Status:</span><span className="font-medium text-green-600">{s.status}</span></div>
                 </div>
-                <Button className={`w-full text-white font-bold rounded-full ${s.actionStyle}`}>{s.action}</Button>
+                <Button
+                  className={`w-full text-white font-bold rounded-full ${s.actionStyle}`}
+                  onClick={() => joinSession(s.title)}
+                >
+                  {s.action}
+                </Button>
               </CardContent>
             </Card>
           ))}
@@ -125,7 +133,12 @@ export default function GameAlong() {
                     <div className="flex justify-between"><span className="text-muted-foreground">Registered:</span><span>{t.registered}</span></div>
                     <div className="flex justify-between"><span className="text-muted-foreground">Registration Ends:</span><span>{t.ends}</span></div>
                   </div>
-                  <Button className="w-full font-bold rounded-full"><Trophy className="w-4 h-4 mr-2" />Register for Tournament</Button>
+                  <Button
+                    className="w-full font-bold rounded-full"
+                    onClick={() => registerTournament(t.title)}
+                  >
+                    <Trophy className="w-4 h-4 mr-2" />Register for Tournament
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -150,7 +163,14 @@ export default function GameAlong() {
                   <div>{cat.games} games</div>
                   <div>Avg. {cat.avg}</div>
                 </div>
-                <Button variant="default" size="sm" className="w-full font-bold rounded-full">Play Games</Button>
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="w-full font-bold rounded-full"
+                  onClick={() => explore(cat.title)}
+                >
+                  Play Games
+                </Button>
               </CardContent>
             </Card>
           ))}
@@ -229,7 +249,9 @@ export default function GameAlong() {
           <Gamepad2 className="w-10 h-10 mx-auto mb-4 opacity-80" />
           <h2 className="text-3xl font-bold mb-3">Join the Game Community</h2>
           <p className="text-white/75 max-w-xl mx-auto mb-8">Connect with fellow believers while learning God's Word through fun, interactive games. Start playing today and grow in faith together!</p>
-          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full">Start Playing</Button>
+          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full" onClick={joinCommunity}>
+            Start Playing
+          </Button>
         </div>
       </section>
     </div>

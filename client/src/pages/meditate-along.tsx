@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Play, Clock, Users, Leaf, Heart, Zap, Star, Shield, Wind } from "lucide-react";
+import { useActionCTA } from "@/hooks/use-action-cta";
 
 const meditationCategories = [
   { icon: <Leaf className="w-8 h-8" />, title: "Peace & Calm", desc: "Find tranquility in God's presence during stressful times", sessions: 24, duration: "5-20 minutes", participants: 456, color: "bg-rose-100 text-rose-600" },
@@ -13,21 +14,6 @@ const meditationCategories = [
   { icon: <Wind className="w-8 h-8" />, title: "Love & Compassion", desc: "Meditate on God's love and grow in compassion", sessions: 22, duration: "5-15 minutes", participants: 345, color: "bg-blue-100 text-blue-600" },
 ];
 
-const todayMeditation = {
-  title: "Finding Peace in God's Presence",
-  tag: "15-minute guided meditation",
-  scripture: "Based on Psalm 46:10",
-  verse: '"Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth."',
-  ref: "Psalm 46:10",
-  focus: "In our noisy world, God invites us to be still and remember His sovereignty. This meditation will guide you through breathing exercises, scripture reflection, and quiet prayer to help you find His peace.",
-  steps: ["Guided breathing exercises (3 minutes)", "Scripture meditation on Psalm 46:10 (5 minutes)", "Silent prayer and reflection (5 minutes)", "Closing prayer and affirmation (2 minutes)"],
-  feedback: [
-    { text: '"This meditation brought such peace to my anxious heart."', author: "- Maria S." },
-    { text: '"I felt God\'s presence so strongly during the silent prayer time."', author: "- David L." },
-  ],
-  participants: 892,
-};
-
 const upcomingSessions = [
   { time: "6:00 AM", title: "Morning Stillness", host: "Sister Grace", duration: "20 min", joined: 156 },
   { time: "12:00 PM", title: "Midday Peace Break", host: "Pastor Tim", duration: "15 min", joined: 89 },
@@ -35,7 +21,16 @@ const upcomingSessions = [
 ];
 
 export default function MeditateAlong() {
-  const [progress, setProgress] = useState(20);
+  const [progress, setProgress] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const { joinSession, startActivity, explore, joinCommunity } = useActionCTA();
+
+  const togglePlay = () => {
+    setPlaying(!playing);
+    if (!playing) {
+      setProgress(p => Math.min(p + 15, 100));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,36 +49,36 @@ export default function MeditateAlong() {
       <section className="container mx-auto px-4 py-16">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold mb-2">Today's Guided Meditation</h2>
-          <p className="text-muted-foreground">Join {todayMeditation.participants} others in today's meditation on God's peace</p>
+          <p className="text-muted-foreground">Join 892 others in today's meditation on God's peace</p>
         </div>
         <div className="max-w-3xl mx-auto">
           <Card className="border border-green-200 bg-green-50/30 dark:bg-green-900/10 shadow-xl">
             <CardContent className="p-8">
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold mb-1">{todayMeditation.title}</h3>
-                <p className="text-green-600 font-medium text-sm">{todayMeditation.tag} · {todayMeditation.scripture}</p>
+                <h3 className="text-2xl font-bold mb-1">Finding Peace in God's Presence</h3>
+                <p className="text-green-600 font-medium text-sm">15-minute guided meditation · Based on Psalm 46:10</p>
               </div>
 
               {/* Player */}
               <div className="bg-background rounded-2xl p-6 mb-6 border">
                 <div className="flex justify-center mb-4">
                   <button
-                    onClick={() => setProgress(p => p < 100 ? p + 10 : 0)}
+                    onClick={togglePlay}
                     className="w-16 h-16 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
                   >
                     <Play className="w-7 h-7 ml-1" />
                   </button>
                 </div>
-                <p className="text-center italic text-muted-foreground mb-1 text-sm">{todayMeditation.verse}</p>
-                <p className="text-center text-xs font-medium text-muted-foreground mb-5">{todayMeditation.ref}</p>
+                <p className="text-center italic text-muted-foreground mb-1 text-sm">"Be still, and know that I am God; I will be exalted among the nations."</p>
+                <p className="text-center text-xs font-medium text-muted-foreground mb-5">Psalm 46:10</p>
                 <div className="mb-4">
                   <p className="text-sm font-semibold mb-2">Meditation Focus:</p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{todayMeditation.focus}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">In our noisy world, God invites us to be still and remember His sovereignty. This meditation will guide you through breathing exercises, scripture reflection, and quiet prayer to help you find His peace.</p>
                 </div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs text-muted-foreground">0:00</span>
-                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
+                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden cursor-pointer" onClick={() => setProgress(p => Math.min(p + 10, 100))}>
+                    <div className="h-full bg-green-500 rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
                   </div>
                   <span className="text-xs text-muted-foreground">15:00</span>
                 </div>
@@ -92,28 +87,32 @@ export default function MeditateAlong() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <p className="font-semibold text-sm mb-3">What You'll Experience:</p>
-                  <ul className="space-y-1">
-                    {todayMeditation.steps.map((s, i) => (
-                      <li key={i} className="text-sm text-muted-foreground">· {s}</li>
-                    ))}
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>· Guided breathing exercises (3 minutes)</li>
+                    <li>· Scripture meditation on Psalm 46:10 (5 minutes)</li>
+                    <li>· Silent prayer and reflection (5 minutes)</li>
+                    <li>· Closing prayer and affirmation (2 minutes)</li>
                   </ul>
                 </div>
                 <div>
                   <p className="font-semibold text-sm mb-3">Community Feedback:</p>
                   <div className="space-y-3">
-                    {todayMeditation.feedback.map((f, i) => (
-                      <div key={i} className="bg-muted/50 rounded-xl p-3 text-xs text-muted-foreground">
-                        {f.text}<br /><span className="font-medium text-foreground">{f.author}</span>
-                      </div>
-                    ))}
+                    <div className="bg-muted/50 rounded-xl p-3 text-xs text-muted-foreground">"This meditation brought such peace to my anxious heart."<br /><span className="font-medium text-foreground">- Maria S.</span></div>
+                    <div className="bg-muted/50 rounded-xl p-3 text-xs text-muted-foreground">"I felt God's presence so strongly during the silent prayer time."<br /><span className="font-medium text-foreground">- David L.</span></div>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 mt-6">
-                <Button className="flex-1 bg-green-600 hover:bg-green-700 font-bold rounded-full"><Play className="w-4 h-4 mr-2" />Start Meditation</Button>
-                <Button variant="outline" className="flex-1 rounded-full"><Clock className="w-4 h-4 mr-2" />Schedule for Later</Button>
-                <Button variant="outline" className="flex-1 rounded-full"><Users className="w-4 h-4 mr-2" />Join Group Session</Button>
+                <Button className="flex-1 bg-green-600 hover:bg-green-700 font-bold rounded-full" onClick={() => startActivity("Guided Meditation")}>
+                  <Play className="w-4 h-4 mr-2" />Start Meditation
+                </Button>
+                <Button variant="outline" className="flex-1 rounded-full" onClick={() => startActivity("Scheduled Meditation")}>
+                  <Clock className="w-4 h-4 mr-2" />Schedule for Later
+                </Button>
+                <Button variant="outline" className="flex-1 rounded-full" onClick={() => joinSession("Group Meditation")}>
+                  <Users className="w-4 h-4 mr-2" />Join Group Session
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -139,7 +138,9 @@ export default function MeditateAlong() {
                     <div className="flex justify-between"><span className="text-muted-foreground">Duration:</span><span>{cat.duration}</span></div>
                     <div className="flex justify-between"><span className="text-muted-foreground">Participants:</span><span>{cat.participants} people</span></div>
                   </div>
-                  <Button className="w-full bg-green-600 hover:bg-green-700 font-bold rounded-full">Explore Meditations</Button>
+                  <Button className="w-full bg-green-600 hover:bg-green-700 font-bold rounded-full" onClick={() => explore(cat.title)}>
+                    Explore Meditations
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -165,7 +166,7 @@ export default function MeditateAlong() {
               </div>
               <div className="text-right">
                 <div className="text-xs text-muted-foreground mb-1"><Users className="w-3 h-3 inline mr-1" />{s.joined} joined</div>
-                <Button size="sm" className="bg-green-600 hover:bg-green-700 rounded-full font-bold">Join</Button>
+                <Button size="sm" className="bg-green-600 hover:bg-green-700 rounded-full font-bold" onClick={() => joinSession(s.title)}>Join</Button>
               </div>
             </div>
           ))}
@@ -178,7 +179,9 @@ export default function MeditateAlong() {
           <Sparkles className="w-10 h-10 mx-auto mb-4 opacity-80" />
           <h2 className="text-3xl font-bold mb-3">Begin Your Journey to Inner Peace</h2>
           <p className="text-white/75 max-w-xl mx-auto mb-8">Start meditating with our community and experience the transforming peace of God.</p>
-          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full">Start Meditating</Button>
+          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full" onClick={joinCommunity}>
+            Start Meditating
+          </Button>
         </div>
       </section>
     </div>

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookMarked, Users, Star, Send, Upload, Clock } from "lucide-react";
+import { BookMarked, Users, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
@@ -12,6 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { useActionCTA } from "@/hooks/use-action-cta";
 
 const currentBooks = [
   { id: 1, title: "God and Money", author: "John Cortines & Gregory Baumer", chapter: "Chapter 8: The Theology of Enough", participants: 892, progress: 65, week: "Week 8 of 12", discussion: "Active" },
@@ -21,7 +22,7 @@ const currentBooks = [
 const upcomingBooks = [
   { title: "Managing God's Money", author: "Randy Alcorn", starts: "January 15, 2026", spots: 120, enrolled: 43 },
   { title: "Money, Possessions, and Eternity", author: "Randy Alcorn", starts: "February 1, 2026", spots: 80, enrolled: 29 },
-  { title: "The Total Money Makeover (Christian Edition)", author: "Dave Ramsey", starts: "March 1, 2026", spots: 200, enrolled: 112 },
+  { title: "The Total Money Makeover", author: "Dave Ramsey", starts: "March 1, 2026", spots: 200, enrolled: 112 },
 ];
 
 const discussions = [
@@ -39,6 +40,7 @@ const submitSchema = z.object({
 export default function ReadAlong() {
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
+  const { joinSession, registerTournament, startActivity, joinCommunity } = useActionCTA();
 
   const form = useForm({
     resolver: zodResolver(submitSchema),
@@ -95,7 +97,9 @@ export default function ReadAlong() {
                   <Users className="w-4 h-4" />{book.participants} readers
                   <Badge variant="outline" className="ml-auto text-xs">{book.discussion}</Badge>
                 </div>
-                <Button className="w-full font-bold rounded-full">Join This Book Club</Button>
+                <Button className="w-full font-bold rounded-full" onClick={() => joinSession(`${book.title} Book Club`)}>
+                  Join This Book Club
+                </Button>
               </CardContent>
             </Card>
           ))}
@@ -119,7 +123,9 @@ export default function ReadAlong() {
                     <div className="flex justify-between"><span className="text-muted-foreground">Starts:</span><span>{book.starts}</span></div>
                     <div className="flex justify-between"><span className="text-muted-foreground">Spots:</span><span>{book.enrolled}/{book.spots}</span></div>
                   </div>
-                  <Button className="w-full font-bold rounded-full">Register</Button>
+                  <Button className="w-full font-bold rounded-full" onClick={() => registerTournament(book.title)}>
+                    Register
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -144,7 +150,9 @@ export default function ReadAlong() {
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span>By {d.author}</span>
                       <span>{d.replies} replies</span>
-                      <Button size="sm" variant="ghost" className="ml-auto h-7 text-xs rounded-full">Join Discussion</Button>
+                      <Button size="sm" variant="ghost" className="ml-auto h-7 text-xs rounded-full" onClick={() => startActivity(`Discussion: ${d.topic}`)}>
+                        Join Discussion
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -163,7 +171,7 @@ export default function ReadAlong() {
                 {!isAuthenticated ? (
                   <div className="text-center py-4">
                     <p className="text-muted-foreground text-sm mb-4">Login to share your reading insights.</p>
-                    <Button asChild className="w-full font-bold"><a href="/auth">Login</a></Button>
+                    <Button className="w-full font-bold" onClick={() => joinCommunity()}>Login</Button>
                   </div>
                 ) : (
                   <Form {...form}>
@@ -190,7 +198,9 @@ export default function ReadAlong() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-3">Read, Grow, Transform</h2>
           <p className="text-white/75 max-w-xl mx-auto mb-8">Join a community of readers who are letting God's Word reshape their relationship with money.</p>
-          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full">Join a Book Club</Button>
+          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full" onClick={joinCommunity}>
+            Join a Book Club
+          </Button>
         </div>
       </section>
     </div>

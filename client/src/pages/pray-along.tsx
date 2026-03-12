@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Headphones, Play, Users, Heart, Send, Upload, Clock } from "lucide-react";
+import { Headphones, Play, Users, Heart, Send, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { useActionCTA } from "@/hooks/use-action-cta";
 
 const prayerTracks = [
   { id: 1, title: "The Provision Journey", desc: "A 20-minute immersive prayer experience focused on Jehovah Jireh, our Provider.", duration: "20 min", listeners: 3456, theme: "Provision", verse: "Philippians 4:19" },
@@ -46,6 +47,7 @@ export default function PrayAlong() {
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
   const [prayedIds, setPrayedIds] = useState<number[]>([]);
+  const { joinSession, startActivity, joinCommunity } = useActionCTA();
 
   const form = useForm({
     resolver: zodResolver(submitSchema),
@@ -89,13 +91,15 @@ export default function PrayAlong() {
                 <Badge className={`mb-4 text-xs text-white ${s.status === "Live" ? "bg-red-500" : "bg-secondary"}`}>{s.status}</Badge>
                 <h3 className="font-bold text-lg mb-1">{s.title}</h3>
                 <p className="text-sm text-muted-foreground mb-1">Led by {s.host}</p>
-                <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground mb-5">
+                <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground mb-2">
                   <Users className="w-4 h-4" />{s.participants} praying
                 </div>
-                <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-4">
+                <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground mb-5">
                   <Clock className="w-3.5 h-3.5" />{s.time}
                 </div>
-                <Button className="w-full font-bold rounded-full"><Play className="w-4 h-4 mr-2" />Join Prayer</Button>
+                <Button className="w-full font-bold rounded-full" onClick={() => joinSession(s.title)}>
+                  <Play className="w-4 h-4 mr-2" />Join Prayer
+                </Button>
               </CardContent>
             </Card>
           ))}
@@ -123,7 +127,9 @@ export default function PrayAlong() {
                   <div className="flex items-center text-xs text-muted-foreground mb-4">
                     <Headphones className="w-3 h-3 mr-1" />{track.listeners.toLocaleString()} listeners
                   </div>
-                  <Button className="w-full font-bold rounded-full"><Play className="w-4 h-4 mr-2" />Listen & Pray</Button>
+                  <Button className="w-full font-bold rounded-full" onClick={() => startActivity(track.title)}>
+                    <Play className="w-4 h-4 mr-2" />Listen & Pray
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -150,7 +156,10 @@ export default function PrayAlong() {
                       </div>
                     </div>
                     <div className="mt-4 flex items-center gap-3">
-                      <button onClick={() => setPrayedIds(ids => ids.includes(i) ? ids.filter(id => id !== i) : [...ids, i])} className={`flex items-center gap-1.5 text-sm transition-colors ${prayedIds.includes(i) ? "text-primary" : "text-muted-foreground hover:text-primary"}`}>
+                      <button
+                        onClick={() => setPrayedIds(ids => ids.includes(i) ? ids.filter(id => id !== i) : [...ids, i])}
+                        className={`flex items-center gap-1.5 text-sm transition-colors ${prayedIds.includes(i) ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+                      >
                         <Heart className="w-4 h-4" />Praying ({p.prayed + (prayedIds.includes(i) ? 1 : 0)})
                       </button>
                     </div>
@@ -171,7 +180,7 @@ export default function PrayAlong() {
                 {!isAuthenticated ? (
                   <div className="text-center py-4">
                     <p className="text-muted-foreground text-sm mb-4">Please log in to submit a prayer request.</p>
-                    <Button asChild className="w-full font-bold"><a href="/auth">Login</a></Button>
+                    <Button className="w-full font-bold" onClick={() => joinCommunity()}>Login</Button>
                   </div>
                 ) : (
                   <Form {...form}>
@@ -200,7 +209,9 @@ export default function PrayAlong() {
           <Headphones className="w-10 h-10 mx-auto mb-4 opacity-80" />
           <h2 className="text-3xl font-bold mb-3">The Prayer of the Righteous is Powerful</h2>
           <p className="text-white/75 max-w-xl mx-auto mb-8">Join our prayer community and see God move in your life and the lives of others.</p>
-          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full">Join Prayer Community</Button>
+          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full" onClick={joinCommunity}>
+            Join Prayer Community
+          </Button>
         </div>
       </section>
     </div>

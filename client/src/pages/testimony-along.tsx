@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Users, Heart, MessageSquare, ThumbsUp, Send, Upload } from "lucide-react";
+import { Users, Heart, MessageSquare, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { useActionCTA } from "@/hooks/use-action-cta";
 
 const testimonies = [
   { id: 1, name: "Grace Okwuosa", avatar: "G", category: "Financial Breakthrough", date: "2 days ago", likes: 87, comments: 23, content: "After applying the biblical stewardship principles from this community, our family paid off $28,000 in debt in just 14 months! God is faithful and His Word truly works when we trust Him with our finances.", verified: true },
@@ -37,6 +38,7 @@ const submitSchema = z.object({
 export default function TestimonyAlong() {
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
+  const { joinCommunity } = useActionCTA();
   const [likedIds, setLikedIds] = useState<number[]>([]);
 
   const form = useForm({
@@ -100,7 +102,10 @@ export default function TestimonyAlong() {
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground mb-5">{t.content}</p>
                   <div className="flex gap-4">
-                    <button onClick={() => setLikedIds(ids => ids.includes(t.id) ? ids.filter(i => i !== t.id) : [...ids, t.id])} className={`flex items-center gap-1.5 text-sm transition-colors ${likedIds.includes(t.id) ? "text-red-500" : "text-muted-foreground hover:text-red-500"}`}>
+                    <button
+                      onClick={() => setLikedIds(ids => ids.includes(t.id) ? ids.filter(i => i !== t.id) : [...ids, t.id])}
+                      className={`flex items-center gap-1.5 text-sm transition-colors ${likedIds.includes(t.id) ? "text-red-500" : "text-muted-foreground hover:text-red-500"}`}
+                    >
                       <Heart className="w-4 h-4" />{t.likes + (likedIds.includes(t.id) ? 1 : 0)}
                     </button>
                     <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -124,7 +129,7 @@ export default function TestimonyAlong() {
                 {!isAuthenticated ? (
                   <div className="text-center py-4">
                     <p className="text-muted-foreground text-sm mb-4">Please log in to share your testimony with the community.</p>
-                    <Button asChild className="w-full font-bold"><a href="/auth">Login to Share</a></Button>
+                    <Button className="w-full font-bold" onClick={() => joinCommunity()}>Login to Share</Button>
                   </div>
                 ) : (
                   <Form {...form}>
@@ -136,9 +141,7 @@ export default function TestimonyAlong() {
                         <FormItem><FormLabel>Your Testimony</FormLabel><FormControl><Textarea placeholder="Share what God has done in your life..." className="min-h-[140px]" {...field} /></FormControl><FormMessage /></FormItem>
                       )} />
                       <FormField control={form.control} name="mediaUrl" render={({ field }) => (
-                        <FormItem><FormLabel>Media Link (Optional)</FormLabel><FormControl>
-                          <div className="flex gap-2"><Input placeholder="YouTube, audio or image URL..." {...field} /><Button type="button" variant="outline" size="icon" className="shrink-0"><Upload className="w-4 h-4" /></Button></div>
-                        </FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>Media Link (Optional)</FormLabel><FormControl><Input placeholder="YouTube, audio or image URL..." {...field} /></FormControl><FormMessage /></FormItem>
                       )} />
                       <Button type="submit" className="w-full font-bold h-11" disabled={mutation.isPending}>
                         {mutation.isPending ? "Submitting..." : "Submit Testimony"}
@@ -157,7 +160,9 @@ export default function TestimonyAlong() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-3">Your Story Matters</h2>
           <p className="text-white/75 max-w-xl mx-auto mb-8">Every testimony of God's faithfulness encourages someone else to keep trusting Him. Share yours today.</p>
-          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full">Share Your Story</Button>
+          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full" onClick={joinCommunity}>
+            Share Your Story
+          </Button>
         </div>
       </section>
     </div>

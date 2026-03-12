@@ -112,36 +112,43 @@ export async function registerRoutes(
     });
   });
 
-  // Seed DB Function — hardcoded data ensures content is always present on Vercel
+  // Seed DB — upsert ensures all content is always present (Vercel-safe)
   async function seedDatabase() {
     try {
-      const existingTracks = await storage.getTracks();
-      if (existingTracks.length === 0) {
-        // Tracks
-        await storage.createTrack({ slug: 'foundations', title: 'Foundations of Stewardship', description: 'Learn the biblical principles of managing money and resources with wisdom and faith.', order: 1 });
-        await storage.createTrack({ slug: 'investing', title: 'Kingdom Investing', description: 'How to invest your resources for eternal impact, growth, and generosity.', order: 2 });
-        await storage.createTrack({ slug: 'debt-freedom', title: 'Debt-Free Living', description: 'Biblical strategies for eliminating debt and building a legacy of financial freedom.', order: 3 });
-        await storage.createTrack({ slug: 'generosity', title: 'The Generous Life', description: 'Discover the joy and biblical mandate of radical, joyful giving.', order: 4 });
+      const { db } = await import("./db");
+      const { tracks: tracksTable, courses: coursesTable } = await import("@shared/schema");
 
-        const tracksList = await storage.getTracks();
-        const [track1, track2, track3, track4] = tracksList;
+      const seedTracks = [
+        { slug: 'foundations', title: 'Foundations of Stewardship', description: 'Learn the biblical principles of managing money and resources with wisdom and faith.', order: 1 },
+        { slug: 'investing', title: 'Kingdom Investing', description: 'How to invest your resources for eternal impact, growth, and generosity.', order: 2 },
+        { slug: 'debt-freedom', title: 'Debt-Free Living', description: 'Biblical strategies for eliminating debt and building a legacy of financial freedom.', order: 3 },
+        { slug: 'generosity', title: 'The Generous Life', description: 'Discover the joy and biblical mandate of radical, joyful giving.', order: 4 },
+      ];
 
-        if (track1) {
-          await storage.createCourse({ trackId: track1.id, slug: 'stewardship-101', title: 'Stewardship 101', description: 'A comprehensive introduction to biblical financial management. Learn what the Bible says about money, resources, and your role as a steward.', price: 0, level: 'beginner', duration: '4 hours', isPublished: true });
-          await storage.createCourse({ trackId: track1.id, slug: 'budgeting-masterclass', title: 'Budgeting Masterclass', description: 'Take control of your cash flow with practical, Bible-based budgeting tools. Build a spending plan that reflects your values and priorities.', price: 9900, level: 'intermediate', duration: '6 hours', isPublished: true });
-        }
-        if (track2) {
-          await storage.createCourse({ trackId: track2.id, slug: 'kingdom-investing', title: 'Kingdom Investing Principles', description: 'Learn how to grow your wealth while keeping an eternal perspective. Biblical wisdom for the stock market, real estate, and business.', price: 14900, level: 'intermediate', duration: '8 hours', isPublished: true });
-          await storage.createCourse({ trackId: track2.id, slug: 'retirement-gods-way', title: "Retirement God's Way", description: 'Plan for the future with faith and wisdom. How to save, invest, and leave a godly legacy for the next generation.', price: 12900, level: 'advanced', duration: '5 hours', isPublished: true });
-        }
-        if (track3) {
-          await storage.createCourse({ trackId: track3.id, slug: 'debt-freedom-plan', title: 'The Debt Freedom Plan', description: 'A proven, Scripture-backed system for eliminating all consumer debt and achieving true financial freedom in Christ.', price: 7900, level: 'beginner', duration: '6 hours', isPublished: true });
-        }
-        if (track4) {
-          await storage.createCourse({ trackId: track4.id, slug: 'radical-generosity', title: 'Radical Generosity', description: 'Experience the transforming power of giving. Learn the principles of tithing, offerings, and how generosity unlocks God\'s blessing.', price: 0, level: 'beginner', duration: '3 hours', isPublished: true });
-        }
-        console.log("[seed] Database seeded with tracks and courses.");
+      for (const t of seedTracks) {
+        await db.insert(tracksTable).values(t).onConflictDoUpdate({ target: tracksTable.slug, set: { title: t.title, description: t.description } });
       }
+
+      const tracksList = await storage.getTracks();
+      const trackMap = Object.fromEntries(tracksList.map(t => [t.slug, t.id]));
+
+      const seedCourses = [
+        { trackSlug: 'foundations', slug: 'stewardship-101', title: 'Stewardship 101', description: 'A comprehensive introduction to biblical financial management. Learn what the Bible says about money, resources, and your role as a steward.', price: 0, level: 'beginner', duration: '4 hours' },
+        { trackSlug: 'foundations', slug: 'budgeting-masterclass', title: 'Budgeting Masterclass', description: 'Take control of your cash flow with practical, Bible-based budgeting tools. Build a spending plan that reflects your values.', price: 9900, level: 'intermediate', duration: '6 hours' },
+        { trackSlug: 'investing', slug: 'kingdom-investing', title: 'Kingdom Investing Principles', description: 'Learn how to grow your wealth while keeping an eternal perspective. Biblical wisdom for the stock market, real estate, and business.', price: 14900, level: 'intermediate', duration: '8 hours' },
+        { trackSlug: 'investing', slug: 'retirement-gods-way', title: "Retirement God's Way", description: 'Plan for the future with faith and wisdom. How to save, invest, and leave a godly legacy for the next generation.', price: 12900, level: 'advanced', duration: '5 hours' },
+        { trackSlug: 'debt-freedom', slug: 'debt-freedom-plan', title: 'The Debt Freedom Plan', description: 'A proven, Scripture-backed system for eliminating all consumer debt and achieving true financial freedom in Christ.', price: 7900, level: 'beginner', duration: '6 hours' },
+        { trackSlug: 'generosity', slug: 'radical-generosity', title: 'Radical Generosity', description: "Experience the transforming power of giving. Learn the principles of tithing, offerings, and how generosity unlocks God's blessing.", price: 0, level: 'beginner', duration: '3 hours' },
+      ];
+
+      for (const c of seedCourses) {
+        const trackId = trackMap[c.trackSlug];
+        if (!trackId) continue;
+        const { trackSlug, ...rest } = c;
+        await db.insert(coursesTable).values({ ...rest, trackId, isPublished: true }).onConflictDoUpdate({ target: coursesTable.slug, set: { title: rest.title, description: rest.description, price: rest.price } });
+      }
+
+      console.log("[seed] Database upserted: 4 tracks, 6 courses.");
     } catch (error) {
       console.error("Database seeding failed:", error);
     }

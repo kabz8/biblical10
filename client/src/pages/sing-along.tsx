@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mic2, Play, Music2, Users, Heart, Star, Search } from "lucide-react";
+import { Mic2, Play, Music2, Users, Heart, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useActionCTA } from "@/hooks/use-action-cta";
 
 const liveSessions = [
   { id: 1, title: "Sunday Morning Praise", host: "Worship Team", participants: 234, genre: "Contemporary", status: "Live", time: "Now" },
@@ -12,12 +13,12 @@ const liveSessions = [
 ];
 
 const featuredSongs = [
-  { id: 1, title: "How Great is Our God", artist: "Chris Tomlin", key: "G", tempo: "84 BPM", category: "Worship", participants: 1245, hasChords: true, hasLyrics: true },
-  { id: 2, title: "Amazing Grace", artist: "Traditional", key: "D", tempo: "72 BPM", category: "Hymn", participants: 2341, hasChords: true, hasLyrics: true },
-  { id: 3, title: "Oceans (Where Feet May Fail)", artist: "Hillsong United", key: "D", tempo: "69 BPM", category: "Contemporary", participants: 987, hasChords: true, hasLyrics: true },
-  { id: 4, title: "Way Maker", artist: "Sinach", key: "E", tempo: "78 BPM", category: "Worship", participants: 1567, hasChords: true, hasLyrics: true },
-  { id: 5, title: "Great Are You Lord", artist: "All Sons & Daughters", key: "A", tempo: "65 BPM", category: "Worship", participants: 678, hasChords: true, hasLyrics: true },
-  { id: 6, title: "10,000 Reasons (Bless the Lord)", artist: "Matt Redman", key: "G", tempo: "74 BPM", category: "Contemporary", participants: 1890, hasChords: true, hasLyrics: true },
+  { id: 1, title: "How Great is Our God", artist: "Chris Tomlin", key: "G", tempo: "84 BPM", category: "Worship", participants: 1245 },
+  { id: 2, title: "Amazing Grace", artist: "Traditional", key: "D", tempo: "72 BPM", category: "Hymn", participants: 2341 },
+  { id: 3, title: "Oceans (Where Feet May Fail)", artist: "Hillsong United", key: "D", tempo: "69 BPM", category: "Contemporary", participants: 987 },
+  { id: 4, title: "Way Maker", artist: "Sinach", key: "E", tempo: "78 BPM", category: "Worship", participants: 1567 },
+  { id: 5, title: "Great Are You Lord", artist: "All Sons & Daughters", key: "A", tempo: "65 BPM", category: "Worship", participants: 678 },
+  { id: 6, title: "10,000 Reasons (Bless the Lord)", artist: "Matt Redman", key: "G", tempo: "74 BPM", category: "Contemporary", participants: 1890 },
 ];
 
 const categories = [
@@ -44,6 +45,8 @@ const tips = [
 
 export default function SingAlong() {
   const [search, setSearch] = useState("");
+  const { joinSession, startActivity, explore, joinCommunity } = useActionCTA();
+
   const filtered = featuredSongs.filter(s => s.title.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase()));
 
   return (
@@ -80,7 +83,9 @@ export default function SingAlong() {
                 <div className="flex items-center gap-2 mb-5 text-sm text-muted-foreground">
                   <Users className="w-4 h-4" />{s.participants} singing now
                 </div>
-                <Button className="w-full font-bold rounded-full"><Play className="w-4 h-4 mr-2" />Join Session</Button>
+                <Button className="w-full font-bold rounded-full" onClick={() => joinSession(s.title)}>
+                  <Play className="w-4 h-4 mr-2" />Join Session
+                </Button>
               </CardContent>
             </Card>
           ))}
@@ -95,8 +100,7 @@ export default function SingAlong() {
             <p className="text-muted-foreground">Access lyrics, chords, and backing tracks</p>
           </div>
           <div className="relative max-w-md mx-auto mb-8">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input className="pl-10 rounded-full" placeholder="Search songs or artists..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Input className="rounded-full pl-4" placeholder="Search songs or artists..." value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filtered.map((song) => (
@@ -117,8 +121,12 @@ export default function SingAlong() {
                     <Users className="w-3 h-3 mr-1" />{song.participants.toLocaleString()} singers
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" className="flex-1 rounded-full font-bold"><Music2 className="w-3 h-3 mr-1" />Lyrics</Button>
-                    <Button size="sm" variant="outline" className="flex-1 rounded-full">Chords</Button>
+                    <Button size="sm" className="flex-1 rounded-full font-bold" onClick={() => startActivity(`${song.title} Lyrics`)}>
+                      <Music2 className="w-3 h-3 mr-1" />Lyrics
+                    </Button>
+                    <Button size="sm" variant="outline" className="flex-1 rounded-full" onClick={() => startActivity(`${song.title} Chords`)}>
+                      Chords
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -135,7 +143,11 @@ export default function SingAlong() {
         </div>
         <div className="flex flex-wrap justify-center gap-4">
           {categories.map((cat) => (
-            <button key={cat.name} className={`px-6 py-3 rounded-full font-bold text-sm shadow-sm hover:opacity-90 transition-opacity ${cat.color}`}>
+            <button
+              key={cat.name}
+              className={`px-6 py-3 rounded-full font-bold text-sm shadow-sm hover:opacity-90 transition-opacity ${cat.color}`}
+              onClick={() => explore(cat.name)}
+            >
               {cat.name} <span className="opacity-75 ml-1">({cat.count})</span>
             </button>
           ))}
@@ -163,7 +175,9 @@ export default function SingAlong() {
                   <div className="text-xs text-muted-foreground mb-1">{r.date}</div>
                   <div className="text-xs font-medium text-primary">{r.streams.toLocaleString()} plays</div>
                 </div>
-                <Button size="sm" className="rounded-full ml-2"><Play className="w-3 h-3" /></Button>
+                <Button size="sm" className="rounded-full ml-2" onClick={() => startActivity(r.title)}>
+                  <Play className="w-3 h-3" />
+                </Button>
               </div>
             ))}
           </div>
@@ -195,7 +209,9 @@ export default function SingAlong() {
           <Mic2 className="w-10 h-10 mx-auto mb-4 opacity-80" />
           <h2 className="text-3xl font-bold mb-3">Raise Your Voice in Praise</h2>
           <p className="text-white/75 max-w-xl mx-auto mb-8">Join thousands of believers lifting their voices together in worship of our great God.</p>
-          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full">Start Singing</Button>
+          <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold px-10 rounded-full" onClick={joinCommunity}>
+            Start Singing
+          </Button>
         </div>
       </section>
     </div>
