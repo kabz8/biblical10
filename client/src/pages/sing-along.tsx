@@ -19,9 +19,9 @@ const featuredSongs = [
     artist: "Dinu Zeno",
     key: "G",
     tempo: "Medium",
-    category: "Kids Worship",
+    category: "Worship",
     participants: 0,
-    file: "/songs/Dinu-Zeno-Bwana-U-Sehemu-Yangu.mp3",
+    file: "/Songs/Dinu-Zeno-Bwana-U-Sehemu-Yangu.mp3",
   },
   {
     id: 2,
@@ -29,9 +29,9 @@ const featuredSongs = [
     artist: "Dinu Zeno",
     key: "F",
     tempo: "Medium",
-    category: "Kids Worship",
+    category: "Worship",
     participants: 0,
-    file: "/songs/Dinu-Zeno-Mteeteni-Yesu.mp3",
+    file: "/Songs/Dinu-Zeno-Mteteeni-Yesu.mp3",
   },
   {
     id: 3,
@@ -39,9 +39,9 @@ const featuredSongs = [
     artist: "Dinu Zeno",
     key: "E",
     tempo: "Slow",
-    category: "Kids Worship",
+    category: "Worship",
     participants: 0,
-    file: "/songs/Dinu-Zeno-Nataka-Nimjue-Yesu.mp3",
+    file: "/Songs/Dinu-Zeno-Nataka-Nimjue-Yesu.mp3",
   },
   {
     id: 4,
@@ -49,9 +49,9 @@ const featuredSongs = [
     artist: "Dinu Zeno",
     key: "D",
     tempo: "Medium",
-    category: "Kids Worship",
+    category: "Worship",
     participants: 0,
-    file: "/songs/Dinu-Zeno-Yesu-Kwetu-ni-Rafiki.mp3",
+    file: "/Songs/Dinu-Zeno-Yesu-Kwetu-ni-Rafiki.mp3",
   },
 ];
 

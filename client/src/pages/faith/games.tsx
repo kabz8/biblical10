@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Gamepad2, RotateCcw } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 type QuizQuestion = {
   id: number;
@@ -166,6 +167,50 @@ function getLettersFromCells(grid: string[], cells: { r: number; c: number }[]) 
   return cells.map(({ r, c }) => grid[r]?.[c] ?? "").join("");
 }
 
+function findWordPath(grid: string[], targetNorm: string) {
+  const rows = grid.length;
+  const cols = grid[0]?.length ?? 0;
+  if (!rows || !cols) return null;
+
+  const directions = [
+    { dr: 0, dc: 1 },
+    { dr: 0, dc: -1 },
+    { dr: 1, dc: 0 },
+    { dr: -1, dc: 0 },
+    { dr: 1, dc: 1 },
+    { dr: 1, dc: -1 },
+    { dr: -1, dc: 1 },
+    { dr: -1, dc: -1 },
+  ];
+
+  const len = targetNorm.length;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      for (const { dr, dc } of directions) {
+        const cells: { r: number; c: number }[] = [];
+        let ok = true;
+        for (let i = 0; i < len; i++) {
+          const nr = r + dr * i;
+          const nc = c + dc * i;
+          if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) {
+            ok = false;
+            break;
+          }
+          const ch = grid[nr][nc];
+          if (ch !== targetNorm[i]) {
+            ok = false;
+            break;
+          }
+          cells.push({ r: nr, c: nc });
+        }
+        if (ok) return cells;
+      }
+    }
+  }
+  return null;
+}
+
 function BibleQuizGame() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -296,6 +341,7 @@ function WordSearchGame() {
     () => wordSearchPuzzles.find((p) => p.id === puzzleId) ?? wordSearchPuzzles[0],
     [puzzleId]
   );
+  const { toast } = useToast();
 
   const normalizedWords = useMemo(
     () => puzzle.words.map((w) => ({ raw: w, norm: normalizeWord(w) })),

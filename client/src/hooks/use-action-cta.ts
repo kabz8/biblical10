@@ -10,40 +10,50 @@ export function useActionCTA() {
   const requireAuth = (callback: () => void, message = "Please log in to continue.") => {
     if (!isAuthenticated) {
       toast({
-        title: "Login Required",
+        title: "Guest mode",
         description: message,
       });
-      navigate("/auth");
+      // For now, still allow the action in guest mode
+      callback();
       return;
     }
     callback();
   };
 
   const joinSession = (sessionTitle: string) => {
-    requireAuth(() => {
-      toast({
-        title: "Joining Session!",
-        description: `You've successfully joined "${sessionTitle}". Welcome!`,
-      });
-    }, "Please log in to join a live session.");
+    requireAuth(
+      () => {
+        toast({
+          title: isAuthenticated ? "Joining Session!" : "Joining as guest",
+          description: `You've joined "${sessionTitle}"${isAuthenticated ? "." : " as a guest."}`,
+        });
+      },
+      "You're joining this worship/game session as a guest."
+    );
   };
 
   const registerTournament = (tournamentTitle: string) => {
-    requireAuth(() => {
-      toast({
-        title: "Registered!",
-        description: `You're registered for "${tournamentTitle}". Good luck!`,
-      });
-    }, "Please log in to register for tournaments.");
+    requireAuth(
+      () => {
+        toast({
+          title: isAuthenticated ? "Registered!" : "Registered as guest",
+          description: `You're registered for "${tournamentTitle}".`,
+        });
+      },
+      "You're registering for this tournament as a guest."
+    );
   };
 
   const startActivity = (activityTitle: string) => {
-    requireAuth(() => {
-      toast({
-        title: "Activity Started!",
-        description: `"${activityTitle}" has begun. Enjoy your session!`,
-      });
-    }, "Please log in to start activities.");
+    requireAuth(
+      () => {
+        toast({
+          title: "Activity Started!",
+          description: `"${activityTitle}" has begun. Enjoy!`,
+        });
+      },
+      "You're starting this activity in guest mode."
+    );
   };
 
   const explore = (label: string) => {

@@ -42,7 +42,8 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
           <Link href="/meditation"><DropdownMenuItem className="cursor-pointer">Meditation</DropdownMenuItem></Link>
           <DropdownMenuSeparator />
           <div className="font-bold text-[10px] uppercase text-muted-foreground/60 px-2 py-1.5 tracking-widest">Community</div>
-          <Link href="/games"><DropdownMenuItem className="cursor-pointer">Games</DropdownMenuItem></Link>
+          <Link href="/games"><DropdownMenuItem className="cursor-pointer">Bible Games (Quiz & Word Search)</DropdownMenuItem></Link>
+          <Link href="/game-along"><DropdownMenuItem className="cursor-pointer">Game Along (Live)</DropdownMenuItem></Link>
           <Link href="/testimonies"><DropdownMenuItem className="cursor-pointer">Testimonies</DropdownMenuItem></Link>
           <Link href="/prayers"><DropdownMenuItem className="cursor-pointer">Prayers</DropdownMenuItem></Link>
         </DropdownMenuContent>
@@ -53,6 +54,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
           Along Activities <ChevronDown className="w-4 h-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
+          <Link href="/games"><DropdownMenuItem className="cursor-pointer">Bible Games</DropdownMenuItem></Link>
           <Link href="/testimony-along"><DropdownMenuItem className="cursor-pointer">Testimony Along</DropdownMenuItem></Link>
           <Link href="/pray-along"><DropdownMenuItem className="cursor-pointer">Pray Along</DropdownMenuItem></Link>
           <Link href="/sing-along"><DropdownMenuItem className="cursor-pointer">Sing Along</DropdownMenuItem></Link>
@@ -62,6 +64,9 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
         </DropdownMenuContent>
       </DropdownMenu>
 
+      <Link href="/games" className={`${mobile ? 'py-2 block' : ''} text-sm font-bold text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap ${location === '/games' ? 'text-primary' : ''}`}>
+        Games
+      </Link>
       <Link href="/" className={`${mobile ? 'py-2 block' : ''} text-sm font-bold text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap ${location === '/' ? 'text-primary' : ''}`}>
         Courses
       </Link>
