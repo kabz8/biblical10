@@ -58,7 +58,6 @@ const bibleQuizQuestions: QuizQuestion[] = [
 type WordSearchPuzzle = {
   id: string;
   title: string;
-  grid: string[]; // array of equal-length strings
   words: string[];
 };
 
@@ -66,20 +65,6 @@ const wordSearchPuzzles: WordSearchPuzzle[] = [
   {
     id: "places-in-the-bible",
     title: "Places in the Bible",
-    grid: [
-      "BETHANYQZRTA",
-      "EDENXHJMPTAA",
-      "GOSHENLMNQRS",
-      "MOUNTSINAIVV",
-      "DEADSEATKLMN",
-      "RIVERJORDANO",
-      "SEAOFGALILEE",
-      "CARMELPQRSTU",
-      "ZIONWXYZABCD",
-      "NEBOEFGHIJKL",
-      "ARARATMNOQRS",
-      "GETHSEMANETT",
-    ],
     words: [
       "Bethany",
       "Dead Sea",
@@ -98,20 +83,6 @@ const wordSearchPuzzles: WordSearchPuzzle[] = [
   {
     id: "new-testament-books",
     title: "New Testament Books",
-    grid: [
-      "MATTHEWQWERTA",
-      "MARKASDFGHJKA",
-      "LUKEZXCVBNMAA",
-      "JOHNPQWERTYUA",
-      "ACTSASDFGHJKA",
-      "ROMANSZXCVBNA",
-      "HEBREWSPQRSTA",
-      "JAMESLMNOPQRA",
-      "JUDEABCDEFGHI",
-      "TITUSKLMNOPQA",
-      "PETERASDFGHJA",
-      "REVELATIONZZA",
-    ],
     words: [
       "Acts",
       "Romans",
@@ -348,6 +319,21 @@ function WordSearchGame() {
     [puzzle.words]
   );
 
+  const { grid, rows, cols } = useMemo(() => {
+    const norms = puzzle.words.map(normalizeWord);
+    const maxLen = norms.reduce((m, w) => Math.max(m, w.length), 0);
+    const cols = Math.max(maxLen, 10);
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const built: string[] = norms.map((w) => {
+      let row = w;
+      while (row.length < cols) {
+        row += alphabet[Math.floor(Math.random() * alphabet.length)];
+      }
+      return row;
+    });
+    return { grid: built, rows: built.length, cols };
+  }, [puzzle.words]);
+
   const [showWordList, setShowWordList] = useState(true);
   const [found, setFound] = useState<Record<string, { cells: { r: number; c: number }[] }>>(
     {}
@@ -384,7 +370,7 @@ function WordSearchGame() {
     const cells = buildSelectionCells(dragStart, dragEnd);
     if (cells.length === 0) return;
 
-    const letters = getLettersFromCells(puzzle.grid, cells);
+    const letters = getLettersFromCells(grid, cells).toUpperCase();
     const lettersRev = letters.split("").reverse().join("");
 
     const match = normalizedWords.find(
@@ -406,9 +392,6 @@ function WordSearchGame() {
     setPuzzleId(id);
     resetPuzzle();
   };
-
-  const rows = puzzle.grid.length;
-  const cols = puzzle.grid[0]?.length ?? 0;
 
   return (
     <section className="container mx-auto px-4 py-10">
@@ -473,7 +456,7 @@ function WordSearchGame() {
                     setDragEnd(null);
                   }}
                 >
-                  {puzzle.grid.map((row, r) =>
+                  {grid.map((row, r) =>
                     row.split("").map((ch, c) => {
                       const key = `${r}:${c}`;
                       const isFound = foundCellKey.has(key);

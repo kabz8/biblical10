@@ -1,4 +1,5 @@
-import { useRoute } from "wouter";
+import { useRoute, useLocation } from "wouter";
+import heroImage from "@assets/image-d0880f05-f98b-4eea-8032-aa40c8dd1af7.png";
 import { useCourse } from "@/hooks/use-courses";
 import { useCreateEnrollment, useEnrollments } from "@/hooks/use-enrollments";
 import { useAuth } from "@/hooks/use-auth";
@@ -10,6 +11,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export default function CourseLanding() {
   const [, params] = useRoute("/courses/:slug");
   const slug = params?.slug || "";
+  const [, navigate] = useLocation();
   
   const { data: course, isLoading } = useCourse(slug);
   const { user, isAuthenticated } = useAuth();
@@ -26,6 +28,8 @@ export default function CourseLanding() {
   }
 
   if (!course) {
+    // If we somehow got an invalid slug, gently send people back to home
+    navigate("/");
     return <div className="min-h-screen flex items-center justify-center">Course not found.</div>;
   }
 
@@ -50,7 +54,7 @@ export default function CourseLanding() {
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded bg-muted overflow-hidden">
               {/* landing page course thumbnail */}
-              <img src={course.imageUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200&q=80"} className="w-full h-full object-cover" alt="thumb" />
+              <img src={heroImage} className="w-full h-full object-cover" alt="Course" />
             </div>
             <h3 className="font-bold">{course.title}</h3>
           </div>
@@ -111,8 +115,8 @@ export default function CourseLanding() {
             <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-[2.5rem] transform rotate-3 scale-105 opacity-20"></div>
             <div className="relative rounded-[2.5rem] overflow-hidden border-8 border-background shadow-2xl bg-card">
               {/* landing page main course image */}
-              <img 
-                src={course.imageUrl || "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1000&q=80"} 
+              <img
+                src={heroImage}
                 alt={course.title}
                 className="w-full h-full object-cover"
               />
