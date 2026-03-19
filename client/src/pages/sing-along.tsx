@@ -13,12 +13,46 @@ const liveSessions = [
 ];
 
 const featuredSongs = [
-  { id: 1, title: "How Great is Our God", artist: "Chris Tomlin", key: "G", tempo: "84 BPM", category: "Worship", participants: 1245 },
-  { id: 2, title: "Amazing Grace", artist: "Traditional", key: "D", tempo: "72 BPM", category: "Hymn", participants: 2341 },
-  { id: 3, title: "Oceans (Where Feet May Fail)", artist: "Hillsong United", key: "D", tempo: "69 BPM", category: "Contemporary", participants: 987 },
-  { id: 4, title: "Way Maker", artist: "Sinach", key: "E", tempo: "78 BPM", category: "Worship", participants: 1567 },
-  { id: 5, title: "Great Are You Lord", artist: "All Sons & Daughters", key: "A", tempo: "65 BPM", category: "Worship", participants: 678 },
-  { id: 6, title: "10,000 Reasons (Bless the Lord)", artist: "Matt Redman", key: "G", tempo: "74 BPM", category: "Contemporary", participants: 1890 },
+  {
+    id: 1,
+    title: "Bwana U Sehemu Yangu",
+    artist: "Dinu Zeno",
+    key: "G",
+    tempo: "Medium",
+    category: "Kids Worship",
+    participants: 0,
+    file: "/songs/Dinu-Zeno-Bwana-U-Sehemu-Yangu.mp3",
+  },
+  {
+    id: 2,
+    title: "Mteeteni Yesu",
+    artist: "Dinu Zeno",
+    key: "F",
+    tempo: "Medium",
+    category: "Kids Worship",
+    participants: 0,
+    file: "/songs/Dinu-Zeno-Mteeteni-Yesu.mp3",
+  },
+  {
+    id: 3,
+    title: "Nataka Nimjue Yesu",
+    artist: "Dinu Zeno",
+    key: "E",
+    tempo: "Slow",
+    category: "Kids Worship",
+    participants: 0,
+    file: "/songs/Dinu-Zeno-Nataka-Nimjue-Yesu.mp3",
+  },
+  {
+    id: 4,
+    title: "Yesu Kwetu ni Rafiki",
+    artist: "Dinu Zeno",
+    key: "D",
+    tempo: "Medium",
+    category: "Kids Worship",
+    participants: 0,
+    file: "/songs/Dinu-Zeno-Yesu-Kwetu-ni-Rafiki.mp3",
+  },
 ];
 
 const categories = [
@@ -45,9 +79,16 @@ const tips = [
 
 export default function SingAlong() {
   const [search, setSearch] = useState("");
+  const [currentSong, setCurrentSong] = useState<typeof featuredSongs[number] | null>(
+    featuredSongs[0] ?? null
+  );
   const { joinSession, startActivity, explore, joinCommunity } = useActionCTA();
 
-  const filtered = featuredSongs.filter(s => s.title.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase()));
+  const filtered = featuredSongs.filter(
+    (s) =>
+      s.title.toLowerCase().includes(search.toLowerCase()) ||
+      s.artist.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -99,6 +140,29 @@ export default function SingAlong() {
             <h2 className="text-3xl font-bold mb-2">Song Library</h2>
             <p className="text-muted-foreground">Access lyrics, chords, and backing tracks</p>
           </div>
+          {currentSong && (
+            <div className="max-w-3xl mx-auto mb-8 rounded-2xl border border-border/50 bg-card/80 p-4 shadow-sm">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+                    Now playing
+                  </p>
+                  <p className="font-semibold">
+                    {currentSong.title}{" "}
+                    <span className="text-xs text-muted-foreground">– {currentSong.artist}</span>
+                  </p>
+                </div>
+              </div>
+              <audio
+                key={currentSong.file}
+                controls
+                className="w-full mt-2"
+                src={currentSong.file}
+              >
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          )}
           <div className="relative max-w-md mx-auto mb-8">
             <Input className="rounded-full pl-4" placeholder="Search songs or artists..." value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
@@ -121,11 +185,12 @@ export default function SingAlong() {
                     <Users className="w-3 h-3 mr-1" />{song.participants.toLocaleString()} singers
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" className="flex-1 rounded-full font-bold" onClick={() => startActivity(`${song.title} Lyrics`)}>
-                      <Music2 className="w-3 h-3 mr-1" />Lyrics
-                    </Button>
-                    <Button size="sm" variant="outline" className="flex-1 rounded-full" onClick={() => startActivity(`${song.title} Chords`)}>
-                      Chords
+                    <Button
+                      size="sm"
+                      className="flex-1 rounded-full font-bold"
+                      onClick={() => setCurrentSong(song)}
+                    >
+                      <Music2 className="w-3 h-3 mr-1" />Play
                     </Button>
                   </div>
                 </CardContent>
